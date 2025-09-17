@@ -11,7 +11,7 @@ function App() {
 
     <div className="App">
       
-      <FormEntregador />
+      <FormCliente />
 
       <div style={{marginTop: '6%'}}>
         <Segment vertical color='grey' size='tiny' textAlign='center'>
