@@ -1,11 +1,11 @@
 import React from "react";
 import { Container, Grid, Image } from 'semantic-ui-react';
-
+import MenuSistema from '../../MenuSistema';
 export default function Home () {
 
    return(
        <div>
-
+<MenuSistema tela={'home'} />
            <div style={{marginTop: '5%'}}>
                <Container>
                    <Grid columns={2} divided>
@@ -16,7 +16,7 @@ export default function Home () {
                            <Grid.Column>
                               
                                Bem vindo ao sistema <strong>OxeFood</strong> ! <br/>
-                               Este sistema foi desenvolvido na disciplina de Desenvolvimento para WEB III. <br/> <br/>
+                               Este sistema foi desenvolvido na disciplina de Desenvolvimento para WEB IV. <br/> <br/>
                                Para acessar o código da <strong>API</strong> do sistema, acesse: <a href='https://github.com/robertoalencar/oxefood-api' target='_blank'> https://github.com/robertoalencar/oxefood-api </a> <br/> <br/>
                                Para acessar o código do <strong>Módulo WEB</strong>, acesse: <a href='https://github.com/robertoalencar/oxefood-web' target='_blank'> https://github.com/robertoalencar/oxefood-web </a>
 
