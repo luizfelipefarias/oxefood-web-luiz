@@ -1,9 +1,9 @@
-import InputMask from 'comigo-tech-react-input-mask';
-import React, { useState } from "react";
-import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import axios from "axios";
+import InputMask from 'comigo-tech-react-input-mask';
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
-import { Link } from "react-router-dom";
 export default function FormCliente() {
 
     const [nome, setNome] = useState();
@@ -11,6 +11,31 @@ export default function FormCliente() {
     const [dataNascimento, setDataNascimento] = useState();
     const [foneCelular, setFoneCelular] = useState();
     const [foneFixo, setFoneFixo] = useState();
+    const { state } = useLocation();
+    const [idCliente, setIdCliente] = useState();
+
+    useEffect(() => {
+        if (state != null && state.id != null) {
+            axios.get("http://localhost:8080/api/cliente/" + state.id)
+                .then((response) => {
+                    setIdCliente(response.data.id)
+                    setNome(response.data.nome)
+                    setCpf(response.data.cpf)
+                    setDataNascimento(formatarData(response.data.dataNascimento))
+                    setFoneCelular(response.data.foneCelular)
+                    setFoneFixo(response.data.foneFixo)
+                })
+        }
+    }, [state])
+function formatarData(dataParam) {
+
+        if (dataParam === null || dataParam === '' || dataParam === undefined) {
+            return ''
+        }
+
+        let arrayData = dataParam.split('-');
+        return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+    }
 
     function salvar() {
 
@@ -29,6 +54,7 @@ export default function FormCliente() {
             .catch((error) => {
                 console.log('Erro ao incluir o um cliente.')
             })
+
     }
 
     return (
