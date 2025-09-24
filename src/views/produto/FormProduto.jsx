@@ -1,14 +1,14 @@
 import InputMask from 'comigo-tech-react-input-mask';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
-
+import { Link } from "react-router-dom";
 export default function FormProduto() {
 
     return (
         <div>
-<MenuSistema tela={'produto'} />
+            <MenuSistema tela={'produto'} />
             <div style={{ marginTop: '3%' }}>
-                
+
                 <Container textAlign="justified">
                     <h2>
                         <span style={{ color: "darkgray" }}> Produto &nbsp;<Icon name='angle double right' size="small" /> Cadastro</span>
@@ -74,19 +74,19 @@ export default function FormProduto() {
                         </Form>
 
                         <div style={{ marginTop: '4%' }}>
-
-                            <Button
-                                type="button"
-                                inverted
-                                circular
-                                icon
-                                labelPosition='left'
-                                color='orange'
-                            >
-                                <Icon name='reply' />
-                                Voltar
-                            </Button>
-
+                            <Link to={'/list-produto'}>
+                                <Button
+                                    type="button"
+                                    inverted
+                                    circular
+                                    icon
+                                    labelPosition='left'
+                                    color='orange'
+                                >
+                                    <Icon name='reply' />
+                                    Voltar
+                                </Button>
+                            </Link>
                             <Button
                                 inverted
                                 circular
@@ -95,6 +95,7 @@ export default function FormProduto() {
                                 color='blue'
                                 floated='right'
                             >
+
                                 <Icon name='save' />
                                 Salvar
                             </Button>

@@ -1,4 +1,5 @@
 import InputMask from 'comigo-tech-react-input-mask';
+import { Link } from "react-router-dom";
 import { Button, Checkbox, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 export default function FormEntregador() {
@@ -6,7 +7,7 @@ export default function FormEntregador() {
     return (
 
         <div>
-<MenuSistema tela={'entregador'} />
+            <MenuSistema tela={'entregador'} />
             <div style={{ marginTop: '3%' }}>
 
                 <Container textAlign='justified' >
@@ -77,8 +78,8 @@ export default function FormEntregador() {
                                 </Form.Input>
 
                                 <Form.Input
-                                label="Fone Fixo"
-                                width={4}
+                                    label="Fone Fixo"
+                                    width={4}
                                 >
                                     <InputMask
                                         mask="(99) 9999.9999"
@@ -86,15 +87,15 @@ export default function FormEntregador() {
                                 </Form.Input>
 
                                 <Form.Input
-                                width={3}
-                                label = "QTD Entregas Realizadas"
+                                    width={3}
+                                    label="QTD Entregas Realizadas"
                                 >
 
                                 </Form.Input>
 
-                                 <Form.Input
-                                width={3}
-                                label = "QTD Entregas Realizadas"
+                                <Form.Input
+                                    width={3}
+                                    label="QTD Entregas Realizadas"
                                 >
 
                                 </Form.Input>
@@ -103,16 +104,16 @@ export default function FormEntregador() {
                             </Form.Group>
 
                             <Form.Group>
-                                 <Form.Input
-                                width={15}
-                                label = "Rua"
+                                <Form.Input
+                                    width={15}
+                                    label="Rua"
                                 >
 
                                 </Form.Input>
 
-                                 <Form.Input
-                                width={3}
-                                label = "Numero"
+                                <Form.Input
+                                    width={3}
+                                    label="Numero"
                                 >
 
                                 </Form.Input>
@@ -120,44 +121,44 @@ export default function FormEntregador() {
                             </Form.Group>
 
                             <Form.Group>
-                                 <Form.Input
-                                width={8}
-                                label = "Bairro"
+                                <Form.Input
+                                    width={8}
+                                    label="Bairro"
                                 >
                                 </Form.Input>
 
-                                 <Form.Input
-                                width={5}
-                                label = "Cidade"
+                                <Form.Input
+                                    width={5}
+                                    label="Cidade"
                                 >
                                 </Form.Input>
 
-                                 <Form.Input
-                                width={3}
-                                label = "CEP"
+                                <Form.Input
+                                    width={3}
+                                    label="CEP"
                                 >
                                 </Form.Input>
                             </Form.Group>
 
-                           <Form.Group>
-                            
+                            <Form.Group>
+
                                 <Form.Input
                                     fluid
                                     label='UF'
                                     width={16}
-                                    >
+                                >
                                 </Form.Input>
-        
-                           </Form.Group>
 
-                           <Form.Group>
+                            </Form.Group>
+
+                            <Form.Group>
                                 <Form.Input
                                     fluid
                                     label='Complemeto'
                                     width={16}
-                                    >
+                                >
                                 </Form.Input>
-                           </Form.Group>
+                            </Form.Group>
 
 
                             <Form.Group>
@@ -165,13 +166,13 @@ export default function FormEntregador() {
                                 <Checkbox
                                     style={{ marginLeft: '1%' }}
                                     label='sim'>
-                    
-                                </Checkbox>  
 
-                                <Checkbox 
-                                label='não'
-                                style={{ marginLeft: '1%' }}>
-                                    
+                                </Checkbox>
+
+                                <Checkbox
+                                    label='não'
+                                    style={{ marginLeft: '1%' }}>
+
                                 </Checkbox>
 
                             </Form.Group>
@@ -179,19 +180,19 @@ export default function FormEntregador() {
                         </Form>
 
                         <div style={{ marginTop: '4%' }}>
-
-                            <Button
-                                type="button"
-                                inverted
-                                circular
-                                icon
-                                labelPosition='left'
-                                color='orange'
-                            >
-                                <Icon name='reply' />
-                                Voltar
-                            </Button>
-
+                            <Link to={'/list-entregador'}>
+                                <Button
+                                    type="button"
+                                    inverted
+                                    circular
+                                    icon
+                                    labelPosition='left'
+                                    color='orange'
+                                >
+                                    <Icon name='reply' />
+                                    Voltar
+                                </Button>
+                            </Link>
                             <Button
                                 inverted
                                 circular

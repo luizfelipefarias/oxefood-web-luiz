@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import axios from "axios";
 import MenuSistema from '../../MenuSistema';
+import { Link } from "react-router-dom";
 export default function FormCliente() {
 
     const [nome, setNome] = useState();
@@ -13,27 +14,27 @@ export default function FormCliente() {
 
     function salvar() {
 
-		let clienteRequest = {
-		     nome: nome,
-		     cpf: cpf,
-		     dataNascimento: dataNascimento,
-		     foneCelular: foneCelular,
-		     foneFixo: foneFixo
-		}
-	
-		axios.post("http://localhost:8080/api/cliente", clienteRequest)
-		.then((response) => {
-		     console.log('Cliente cadastrado com sucesso.')
-		})
-		.catch((error) => {
-		     console.log('Erro ao incluir o um cliente.')
-		})
-	}
+        let clienteRequest = {
+            nome: nome,
+            cpf: cpf,
+            dataNascimento: dataNascimento,
+            foneCelular: foneCelular,
+            foneFixo: foneFixo
+        }
+
+        axios.post("http://localhost:8080/api/cliente", clienteRequest)
+            .then((response) => {
+                console.log('Cliente cadastrado com sucesso.')
+            })
+            .catch((error) => {
+                console.log('Erro ao incluir o um cliente.')
+            })
+    }
 
     return (
 
         <div>
-<MenuSistema tela={'cliente'} />
+            <MenuSistema tela={'cliente'} />
             <div style={{ marginTop: '3%' }}>
 
                 <Container textAlign='justified' >
@@ -91,7 +92,7 @@ export default function FormCliente() {
                                     width={6}>
                                     <InputMask
                                         mask="(99) 9999.9999"
-                                        value = {foneFixo}
+                                        value={foneFixo}
                                         onChange={e => setFoneFixo(e.target.value)}
                                     />
                                 </Form.Input>
@@ -100,7 +101,7 @@ export default function FormCliente() {
                                     fluid
                                     label='Data Nascimento'
                                     width={6}
-                                    value= {dataNascimento}
+                                    value={dataNascimento}
                                     onChange={e => setDataNascimento(e.target.value)}
                                 >
                                     <InputMask
@@ -115,18 +116,20 @@ export default function FormCliente() {
                         </Form>
 
                         <div style={{ marginTop: '4%' }}>
+                            <Link to={'/list-cliente'}>
 
-                            <Button
-                                type="button"
-                                inverted
-                                circular
-                                icon
-                                labelPosition='left'
-                                color='orange'
-                            >
-                                <Icon name='reply' />
-                                Voltar
-                            </Button>
+                                <Button
+                                    type="button"
+                                    inverted
+                                    circular
+                                    icon
+                                    labelPosition='left'
+                                    color='orange'
+                                >
+                                    <Icon name='reply' />
+                                    Voltar
+                                </Button>
+                            </Link>
 
                             <Button
                                 inverted
