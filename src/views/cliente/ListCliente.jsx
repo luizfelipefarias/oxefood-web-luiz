@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Container, Divider, Icon, Table } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
+import formatarData from '../../utils/FormatarData';
 
 export default function ListCliente() {
 
@@ -19,15 +20,8 @@ export default function ListCliente() {
                 setLista(response.data)
             })
     }
-    function formatarData(dataParam) {
 
-        if (dataParam === null || dataParam === '' || dataParam === undefined) {
-            return ''
-        }
 
-        let arrayData = dataParam.split('-');
-        return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
-    }
     return (
         <div>
             <MenuSistema tela={'cliente'} />
@@ -48,6 +42,7 @@ export default function ListCliente() {
                             as={Link}
                             to='/form-cliente'
                         />
+
                         <br /><br /><br />
 
                         <Table color='orange' sortable celled>
@@ -82,8 +77,9 @@ export default function ListCliente() {
                                                 title='Clique aqui para editar os dados deste cliente'
                                                 icon>
                                                 <Link to="/form-cliente" state={{ id: cliente.id }} style={{ color: 'green' }}> <Icon name='edit' /> </Link>
-                                            </Button> &nbsp;
-
+                                            </Button>
+                                            
+                                            &nbsp;
                                             <Button
                                                 inverted
                                                 circular
@@ -104,5 +100,6 @@ export default function ListCliente() {
             </div>
 
         </div>
+
     )
 }

@@ -1,18 +1,22 @@
-import axios from "axios";
+import axios from 'axios';
 import InputMask from 'comigo-tech-react-input-mask';
-import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
+import formatarData from '../../utils/FormatarData';
+
 export default function FormCliente() {
+
+    const { state } = useLocation();
+    const [idCliente, setIdCliente] = useState();
 
     const [nome, setNome] = useState();
     const [cpf, setCpf] = useState();
     const [dataNascimento, setDataNascimento] = useState();
     const [foneCelular, setFoneCelular] = useState();
     const [foneFixo, setFoneFixo] = useState();
-    const { state } = useLocation();
-    const [idCliente, setIdCliente] = useState();
+
 
     useEffect(() => {
         if (state != null && state.id != null) {
@@ -27,17 +31,9 @@ export default function FormCliente() {
                 })
         }
     }, [state])
-function formatarData(dataParam) {
 
-        if (dataParam === null || dataParam === '' || dataParam === undefined) {
-            return ''
-        }
 
-        let arrayData = dataParam.split('-');
-        return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
-    }
-
-    function salvar() {
+    const salvar = () => {
 
         let clienteRequest = {
             nome: nome,
@@ -47,25 +43,30 @@ function formatarData(dataParam) {
             foneFixo: foneFixo
         }
 
-        axios.post("http://localhost:8080/api/cliente", clienteRequest)
-            .then((response) => {
-                console.log('Cliente cadastrado com sucesso.')
-            })
-            .catch((error) => {
-                console.log('Erro ao incluir o um cliente.')
-            })
+        if (idCliente != null) { //Alteração:
+            axios.put("http://localhost:8080/api/cliente/" + idCliente, clienteRequest)
+                .then((response) => { console.log('Cliente alterado com sucesso.') })
+                .catch((error) => { console.log('Erro ao alter um cliente.') })
+        } else { //Cadastro:
+            axios.post("http://localhost:8080/api/cliente", clienteRequest)
+                .then((response) => { console.log('Cliente cadastrado com sucesso.') })
+                .catch((error) => { console.log('Erro ao incluir o cliente.') })
+        }
+
 
     }
 
     return (
 
         <div>
+
             <MenuSistema tela={'cliente'} />
+
             <div style={{ marginTop: '3%' }}>
 
                 <Container textAlign='justified' >
 
-                    <h2> <span style={{ color: 'darkgray' }}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro </h2>
+                    <h2> <span style={{ color: 'darkgray' }}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> {idCliente === undefined ? 'Cadastro': 'Alteração'} </h2>
 
                     <Divider />
 
@@ -82,19 +83,20 @@ function formatarData(dataParam) {
                                     maxLength="100"
                                     value={nome}
                                     onChange={e => setNome(e.target.value)}
-
                                 />
 
                                 <Form.Input
                                     required
                                     fluid
-                                    label='CPF'>
+                                    label='CPF'
+
+                                >
                                     <InputMask
                                         required
                                         mask="999.999.999-99"
                                         value={cpf}
-                                        onChange={e => setCpf(e.target.value)} />
-
+                                        onChange={e => setCpf(e.target.value)}
+                                    />
                                 </Form.Input>
 
                             </Form.Group>
@@ -127,13 +129,13 @@ function formatarData(dataParam) {
                                     fluid
                                     label='Data Nascimento'
                                     width={6}
-                                    value={dataNascimento}
-                                    onChange={e => setDataNascimento(e.target.value)}
                                 >
                                     <InputMask
                                         mask="99/99/9999"
                                         maskChar={null}
                                         placeholder="Ex: 20/03/1985"
+                                        value={dataNascimento}
+                                        onChange={e => setDataNascimento(e.target.value)}
                                     />
                                 </Form.Input>
 
@@ -142,8 +144,8 @@ function formatarData(dataParam) {
                         </Form>
 
                         <div style={{ marginTop: '4%' }}>
-                            <Link to={'/list-cliente'}>
 
+                            <Link to={'/list-cliente'}>
                                 <Button
                                     type="button"
                                     inverted
@@ -164,7 +166,7 @@ function formatarData(dataParam) {
                                 labelPosition='left'
                                 color='blue'
                                 floated='right'
-                                onClick={() => salvar()}
+                                onClick={() => { salvar() }}
                             >
                                 <Icon name='save' />
                                 Salvar
