@@ -1,11 +1,14 @@
-
 import axios from "axios";
 import InputMask from "comigo-tech-react-input-mask/lib/react-input-mask.development";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Button, Container, Divider, Form, Icon, Radio, Select } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
 
 export default function FormEntregador() {
+
+    const { state } = useLocation();
+    const [entregadorId, setEntregadorId] = useState()
 
     const [nome, setNome] = useState();
     const [CPF, setCPF] = useState();
@@ -23,6 +26,32 @@ export default function FormEntregador() {
     const [enderecoCep, setEnderecoCep] = useState();
     const [enderecoUf, setEnderecoUf] = useState();
     const [ativo, setAtivo] = useState();
+
+    useEffect(() => {
+        if (state != null && state.id != null) {
+            axios.get(`http://localhost:8080/api/entregador/${state.id}`)
+                .then((res) => {
+                    setEntregadorId(res.data.id)
+                    setNome(res.data.nome)
+                    setCPF(res.data.cpf)
+                    setRG(res.data.rg)
+                    setDataNascimento(res.data.dataNascimento)
+                    setFoneCelular(res.data.foneCelular)
+                    setFoneFixo(res.data.foneFixo)
+                    setQtdEntregasRealizadas(res.data.qtdEntregasRealizadas)
+                    setValorFrete(res.data.valorFrete)
+                    setEnderecoRua(res.data.enderecoRua)
+                    setEnderecoComplemento(res.data.enderecoComplemento)
+                    setEnderecoNumero(res.data.enderecoNumero)
+                    setEnderecoBairro(res.data.enderecoBairro)
+                    setEnderecoCidade(res.data.enderecoCidade)
+                    setEnderecoCep(res.data.enderecoCep)
+                    setEnderecoUf(res.data.enderecoUf)
+                    setAtivo(res.data.ativo)
+                })
+        }
+    }, [])
+
 
     const salvar = () => {
 
@@ -45,13 +74,23 @@ export default function FormEntregador() {
             ativo: ativo,
         }
 
-        axios.post("http://localhost:8080/api/entregador", entregadorRequest)
+        if (state != null && state.id != null){
+            axios.put("http://localhost:8080/api/entregador/"+entregadorId, entregadorRequest)
+            .then((response) => {
+                console.log('Cliente alterado com sucesso.')
+            })
+            .catch((error) => {
+                console.log('Erro ao incluir o um cliente.')
+            })
+        } else {
+            axios.post("http://localhost:8080/api/entregador", entregadorRequest)
             .then((response) => {
                 console.log('Cliente cadastrado com sucesso.')
             })
             .catch((error) => {
                 console.log('Erro ao incluir o um cliente.')
             })
+        }
 
         console.log(entregadorRequest)
     }
@@ -154,7 +193,9 @@ export default function FormEntregador() {
                         </Form.Group>
 
                         <Container fluid>
-                            <Button content='Listar' icon='reply' labelPosition='left' color='yellow' basic style={{ borderRadius: '999px' }} />
+                            <Link to='/list-entregador'>
+                                <Button content='Listar' icon='reply' labelPosition='left' color='yellow' basic style={{ borderRadius: '999px' }} />
+                            </Link>
 
                             <Button content='Salvar' icon='save' labelPosition='left' color='blue' basic circular onClick={() => { salvar() }} floated='right' />
                         </Container>
