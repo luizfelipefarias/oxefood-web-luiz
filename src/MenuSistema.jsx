@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 
@@ -31,6 +32,13 @@ export default function MenuSistema(props) {
                     active={props.tela === 'entregador'}
                     as={Link}
                     to='/list-entregador'
+                />
+
+                <Menu.Item
+                    content='Categoria'
+                    active={props.tela === 'categoria'}
+                    as={Link}
+                    to='/list-categoria'
                 />
 
             </Menu>

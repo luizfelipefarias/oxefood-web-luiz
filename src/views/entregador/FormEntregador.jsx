@@ -1,9 +1,9 @@
-import axios from "axios";
 import InputMask from "comigo-tech-react-input-mask/lib/react-input-mask.development";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
 import { Button, Container, Divider, Form, Icon, Radio, Select } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
+import { Link, useLocation } from "react-router-dom";
 
 export default function FormEntregador() {
 

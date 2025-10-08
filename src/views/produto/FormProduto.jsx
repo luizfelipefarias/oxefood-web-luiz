@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { Button, Container, Divider, Form, Icon } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
+import { Link, useLocation } from "react-router-dom";
 
 export default function FormProduto() {
 
@@ -16,25 +16,39 @@ export default function FormProduto() {
     const [tempoEntregaMinimo, setTempoEntregaMinimo] = useState(0);
     const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState(0);
 
+    const [listaCategoria, setListaCategoria] = useState([]);
+    const [idCategoria, setIdCategoria] = useState();
+
+
     useEffect(() => {
         if (state != null && state.id != null) {
             axios.get(`http://localhost:8080/api/produto/${state.id}`)
-            .then((res) => {
-                setProdutoId(res.data.id)
-                setCodigo(res.data.codigo)
-                setTitulo(res.data.titulo)
-                setDescricao(res.data.descricao)
-                setValorUnitario(res.data.valorUnitario)
-                setTempoEntregaMinimo(res.data.tempoEntregaMinimo)
-                setTempoEntregaMaximo(res.data.tempoEntregaMaximo)
-            })
+                .then((res) => {
+                    setProdutoId(res.data.id)
+                    setCodigo(res.data.codigo)
+                    setTitulo(res.data.titulo)
+                    setDescricao(res.data.descricao)
+                    setValorUnitario(res.data.valorUnitario)
+                    setTempoEntregaMinimo(res.data.tempoEntregaMinimo)
+                    setTempoEntregaMaximo(res.data.tempoEntregaMaximo)
+                    setIdCategoria(res.data.idCategoria)
+                })
         }
+
+
+        axios.get("http://localhost:8080/api/categoria-produto")
+            .then((response) => {
+                const dropDownCategorias = response.data.map(c => ({ text: c.descricao, value: c.id }));
+                setListaCategoria(dropDownCategorias);
+            })
+
     }, [])
 
 
     const salvar = () => {
 
         let produtoRequest = {
+            idCategoria: idCategoria,
             codigo: codigo,
             titulo: titulo,
             descricao: descricao,
@@ -46,20 +60,20 @@ export default function FormProduto() {
         console.log(produtoRequest)
         if (state != null && state.id != null) {
             axios.put("http://localhost:8080/api/produto/" + produtoId, produtoRequest)
-            .then((response) => {
-                console.log('Produto alterado com sucesso.')
-            })
-            .catch((error) => {
-                console.log('Erro ao incluir o um cliente.')
-            })
+                .then((response) => {
+                    console.log('Produto alterado com sucesso.')
+                })
+                .catch((error) => {
+                    console.log('Erro ao incluir o um cliente.')
+                })
         } else {
             axios.post("http://localhost:8080/api/produto", produtoRequest)
-            .then((response) => {
-                console.log('Produto cadastrado com sucesso.')
-            })
-            .catch((error) => {
-                console.log('Erro ao incluir o um cliente.')
-            })
+                .then((response) => {
+                    console.log('Produto cadastrado com sucesso.')
+                })
+                .catch((error) => {
+                    console.log('Erro ao incluir o um cliente.')
+                })
         }
     }
 
@@ -81,6 +95,19 @@ export default function FormProduto() {
 
                                 <Form.Input label='Código do Produto' placeholder='Informe o código do produto' width={6} fluid value={codigo} onChange={(e) => { setCodigo(e.target.value) }} required />
                             </Form.Group>
+
+                            <Form.Select
+                                required
+                                fluid
+                                tabIndex='3'
+                                placeholder='Selecione'
+                                label='Categoria'
+                                options={listaCategoria}
+                                value={idCategoria}
+                                onChange={(e, { value }) => {
+                                    setIdCategoria(value)
+                                }}
+                            />
 
                             <Form.Group>
                                 <Form.TextArea label='Descrição' placeholder='Informe a descrição do produto' width={16} fluid value={descricao} onChange={(e) => { setDescricao(e.target.value) }} />

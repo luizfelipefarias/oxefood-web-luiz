@@ -1,9 +1,9 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Button, Container, Divider, Header, Icon, Modal, Table } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
 import formatarData from "../../utils/FormatarData";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function ListEntregador() {
     const [openModal, setOpenModal] = useState(false);
