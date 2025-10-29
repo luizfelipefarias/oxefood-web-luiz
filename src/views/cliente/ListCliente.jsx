@@ -4,13 +4,15 @@ import { Button, Container, Divider, Header, Icon, Modal, Table } from 'semantic
 import MenuSistema from '../../MenuSistema';
 import { Link } from 'react-router-dom';
 import formatarData from '../../utils/FormatarData';
+import ModalListagem from '../../components/ModalListagem';
 
 export default function ListCliente() {
     const [openModal, setOpenModal] = useState(false);
     const [idRemover, setIdRemover] = useState();
 
+    const [clienteModalAberto, setClienteModalAberto] = useState(null);
 
-    const [lista, setLista] = useState([]);
+    const [lista, setLista] = useState([2]);
 
     useEffect(() => {
         carregarLista();
@@ -20,32 +22,37 @@ export default function ListCliente() {
 
         axios.get("http://localhost:8080/api/cliente")
             .then((response) => {
-                setLista(response.data)
+                setLista(response.data);
             })
+            .then((response) => {
+                console.log(lista)
+            })
+
+        console.log(">>>>", lista)
     }
 
-    function confirmaRemover(id){
+    function confirmaRemover(id) {
         setOpenModal(true);
         setIdRemover(id)
     }
 
     async function remover() {
 
-       await axios.delete('http://localhost:8080/api/cliente/' + idRemover)
-       .then((response) => {
- 
-           console.log('Cliente removido com sucesso.')
- 
-           axios.get("http://localhost:8080/api/cliente")
-           .then((response) => {
-               setLista(response.data)
-           })
-       })
-       .catch((error) => {
-           console.log('Erro ao remover um cliente.')
-       })
-       setOpenModal(false)
-   }
+        await axios.delete('http://localhost:8080/api/cliente/' + idRemover)
+            .then((response) => {
+
+                console.log('Cliente removido com sucesso.')
+
+                axios.get("http://localhost:8080/api/cliente")
+                    .then((response) => {
+                        setLista(response.data)
+                    })
+            })
+            .catch((error) => {
+                console.log('Erro ao remover um cliente.')
+            })
+        setOpenModal(false)
+    }
 
 
     return (
@@ -80,6 +87,7 @@ export default function ListCliente() {
                                     <Table.HeaderCell>Data de Nascimento</Table.HeaderCell>
                                     <Table.HeaderCell>Fone Celular</Table.HeaderCell>
                                     <Table.HeaderCell>Fone Fixo</Table.HeaderCell>
+                                    <Table.HeaderCell>Endereços</Table.HeaderCell>
                                     <Table.HeaderCell textAlign='center'>Ações</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
@@ -94,6 +102,21 @@ export default function ListCliente() {
                                         <Table.Cell>{formatarData(cliente.dataNascimento)}</Table.Cell>
                                         <Table.Cell>{cliente.foneCelular}</Table.Cell>
                                         <Table.Cell>{cliente.foneFixo}</Table.Cell>
+                        
+                                        <Table.Cell>
+                                            <span
+                                            onClick={() => { setClienteModalAberto(cliente.id) }}
+                                            style={{ cursor: 'pointer', color: '#5555ff'}}
+                                            >Ver endereços</span>
+                                            <ModalListagem 
+                                            isOpen={clienteModalAberto === cliente.id} 
+                                            setIsOpen={setClienteModalAberto} 
+                                            lista={cliente.enderecos}
+                                            titulo={'endereços de ' + cliente.nome}
+                                            clienteId={cliente.id}
+                                            />
+                                        </Table.Cell>
+
                                         <Table.Cell textAlign='center'>
 
                                             <Button
@@ -104,14 +127,14 @@ export default function ListCliente() {
                                                 icon>
                                                 <Link to="/form-cliente" state={{ id: cliente.id }} style={{ color: 'green' }}> <Icon name='edit' /> </Link>
                                             </Button>
-                                            
+
                                             &nbsp;
                                             <Button
                                                 inverted
                                                 circular
                                                 color='red'
                                                 title='Clique aqui para remover este cliente'
-                                                onClick={() => {confirmaRemover(cliente.id)}}
+                                                onClick={() => { confirmaRemover(cliente.id) }}
                                                 icon>
                                                 <Icon name='trash' />
                                             </Button>
@@ -128,24 +151,25 @@ export default function ListCliente() {
 
 
             <Modal
-               basic
-               onClose={() => setOpenModal(false)}
-               onOpen={() => setOpenModal(true)}
-               open={openModal}
-         >
-               <Header icon>
-                   <Icon name='trash' />
-                   <div style={{marginTop: '5%'}}> Tem certeza que deseja remover esse registro? </div>
-               </Header>
-               <Modal.Actions>
-                   <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
-                       <Icon name='remove' /> Não
-                   </Button>
-                   <Button color='green' inverted onClick={() => remover()}>
-                       <Icon name='checkmark' /> Sim
-                   </Button>
-               </Modal.Actions>
-         </Modal>
+                basic
+                onClose={() => setOpenModal(false)}
+                onOpen={() => setOpenModal(true)}
+                open={openModal}
+            >
+                <Header icon>
+                    <Icon name='trash' />
+                    <div style={{ marginTop: '5%' }}> Tem certeza que deseja remover esse registro? </div>
+                </Header>
+                <Modal.Actions>
+                    <Button basic color='red' inverted onClick={() => setOpenModal(false)}>
+                        <Icon name='remove' /> Não
+                    </Button>
+                    <Button color='green' inverted onClick={() => remover()}>
+                        <Icon name='checkmark' /> Sim
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+
 
 
         </div>

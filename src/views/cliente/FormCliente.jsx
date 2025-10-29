@@ -5,6 +5,7 @@ import { Button, Container, Divider, Form, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
 import { Link, useLocation } from 'react-router-dom';
 import formatarData from '../../utils/FormatarData';
+import ModalCadastroEndereco from './endereco/ModalCadastroEndereco';
 
 export default function FormCliente() {
 
@@ -17,6 +18,10 @@ export default function FormCliente() {
     const [foneCelular, setFoneCelular] = useState();
     const [foneFixo, setFoneFixo] = useState();
 
+    const [enderecoRequest, setEnderecoRequest] = useState(null)
+    const [modalOpen, setModalOpen] = useState(null)
+
+    const [idNovoCliente, setIdNovoCliente] = useState();
 
     useEffect(() => {
         if (state != null && state.id != null) {
@@ -33,7 +38,7 @@ export default function FormCliente() {
     }, [state])
 
 
-    const salvar = () => {
+    const salvar = async () => {
 
         let clienteRequest = {
             nome: nome,
@@ -48,9 +53,18 @@ export default function FormCliente() {
                 .then((response) => { console.log('Cliente alterado com sucesso.') })
                 .catch((error) => { console.log('Erro ao alter um cliente.') })
         } else { //Cadastro:
-            axios.post("http://localhost:8080/api/cliente", clienteRequest)
-                .then((response) => { console.log('Cliente cadastrado com sucesso.') })
+            await axios.post("http://localhost:8080/api/cliente", clienteRequest)
+                .then((response) => {
+                    console.log('Cliente cadastrado com sucesso.', response.data.id);
+                    setIdNovoCliente(response.data.id)
+                })
                 .catch((error) => { console.log('Erro ao incluir o cliente.') })
+
+            if (!!enderecoRequest) {
+                axios.post("http://localhost:8080/api/cliente/endereco/" + idNovoCliente, enderecoRequest)
+                    .then((response) => { console.log('Cliente cadastrado com sucesso.' + response) })
+                    .catch((error) => { console.log('Erro ao incluir o cliente.' + error) })
+            }
         }
 
 
@@ -66,7 +80,7 @@ export default function FormCliente() {
 
                 <Container textAlign='justified' >
 
-                    <h2> <span style={{ color: 'darkgray' }}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> {idCliente === undefined ? 'Cadastro': 'Alteração'} </h2>
+                    <h2> <span style={{ color: 'darkgray' }}> Cliente &nbsp;<Icon name='angle double right' size="small" /> </span> {idCliente === undefined ? 'Cadastro' : 'Alteração'} </h2>
 
                     <Divider />
 
@@ -159,6 +173,7 @@ export default function FormCliente() {
                                 </Button>
                             </Link>
 
+
                             <Button
                                 inverted
                                 circular
@@ -172,6 +187,7 @@ export default function FormCliente() {
                                 Salvar
                             </Button>
 
+                            {!state && <ModalCadastroEndereco isOpen={modalOpen} setIsOpen={setModalOpen} enderecoData={enderecoRequest} setEnderecoData={setEnderecoRequest} />}
                         </div>
 
                     </div>
